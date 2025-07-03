@@ -44,7 +44,7 @@ func InitColmenaRaspberry(r gin.IRouter) {
 	getHandler := colmena_raspberry.NewGetByColmenaUseCase(repo)
 	updateHandler := colmena_raspberry.NewUpdateColmenaRaspberryUseCase(repo)
 	deleteHandler := colmena_raspberry.NewDeleteColmenaRaspberryUseCase(repo)
-	controller := controllers.NewColmenaRaspberryController(createHandler, getHandler, updateHandler, deleteHandler,)
+	controller := controllers.NewColmenaRaspberryController(createHandler, getHandler, updateHandler, deleteHandler)
 	routes.ColmenaRaspberryRoutes(r, controller)
 }
 
@@ -72,7 +72,7 @@ func InitSensores(r gin.IRouter) {
 	getByRaspberryHandler := sensores.NewGetByRaspberryUseCase(repo)
 	updateEstadoHandler := sensores.NewUpdateEstadoSensorUseCase(repo)
 
-	controller := controllers.NewSensoresController(createHandler, getHandler, updateHandler, deleteHandler, getAllHandler, getByRaspberryHandler, updateEstadoHandler)
+	controller := controllers.NewSensoresController(createHandler, getHandler, updateHandler, deleteHandler, getAllHandler, updateEstadoHandler, getByRaspberryHandler )
 	routes.SensoresRoutes(r, controller)
 }
 

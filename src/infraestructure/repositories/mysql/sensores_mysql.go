@@ -129,8 +129,8 @@ func (mysql *SensoresMySQL) GetAllSensores() ([]entities.Sensores, error) {
 	return sensores, nil
 }
 
-func (mysql *SensoresMySQL) GetByRaspberry(id int) (entities.Sensores, error) {
-	var sensor entities.Sensores
+func (mysql *SensoresMySQL) GetByRaspberryID(id int) ([]entities.Sensores, error) {
+	var sensores []entities.Sensores
 
 	query := `SELECT id, id_tipo_sensor, id_raspberry, pin_conexion, direccion_i2c, 
 		estado, fecha_registro FROM sensores WHERE id_raspberry = ?`
@@ -139,7 +139,7 @@ func (mysql *SensoresMySQL) GetByRaspberry(id int) (entities.Sensores, error) {
 	
 	if err != nil {
 		log.Printf("Error getting sensores by raspberry: %v", err)
-		return sensor, err
+		return sensores, err
 	}
 	defer rows.Close()
 
@@ -155,11 +155,12 @@ func (mysql *SensoresMySQL) GetByRaspberry(id int) (entities.Sensores, error) {
 			&sensor.Fecha_Registro)
 		if err != nil {
 			log.Printf("Error scanning sensores: %v", err)
-			return sensor, err
+			return sensores, err
 		}
+		sensores = append(sensores, sensor)
 	}
 
-	return sensor, nil
+	return sensores, nil
 }
 
 func (mysql *SensoresMySQL) UpdateEstadoSensor(id int, estado string) error {

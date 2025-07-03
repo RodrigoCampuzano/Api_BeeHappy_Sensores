@@ -18,7 +18,7 @@ func SensoresRoutes(r gin.IRouter, sensoresService *controllers.SensoresControll
 		sensoresGroup.PUT("/:id", sensoresService.UpdateSensor)
 		sensoresGroup.DELETE("/:id", sensoresService.DeleteSensor)
 		sensoresGroup.GET("/", sensoresService.GetAllSensores)
-		sensoresGroup.GET("/raspberry/:id", sensoresService.GetByRaspberryID)
+		sensoresGroup.GET("/raspberry/:id", sensoresService.GetByRaspberry)
 		sensoresGroup.PUT("/:id/estado", sensoresService.UpdateEstadoSensores)
 	}
 }

@@ -15,6 +15,6 @@ func NewGetRaspberryPiUseCase(repo repositories.RaspberryPiRepositories) *GetRas
 	}
 }
 
-func (uc *GetRaspberryPiUseCase) Execute(id int) (entities.Raspberrypi, error) {
+func (uc *GetRaspberryPiUseCase) Execute(id int) ([]entities.Raspberrypi, error) {
 	return uc.repo.GetRaspberryPi(id)
 }

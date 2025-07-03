@@ -42,13 +42,22 @@ func (mysql *RaspberryPiMySQL) CreateRaspberryPi(rpi entities.Raspberrypi) error
 	return nil
 }
 
-func (mysql *RaspberryPiMySQL) GetRaspberryPi(id int) (entities.Raspberrypi, error) {
-	var rpi entities.Raspberrypi
+func (mysql *RaspberryPiMySQL) GetRaspberryPi(id int) ([]entities.Raspberrypi, error) {	
+	var rpis []entities.Raspberrypi
 
 	query := `SELECT id, mac, nombre, modelo, ip_address, estado, fecha_registro, 
 		fecha_ultima_conexion FROM raspberry_pi WHERE id = ?`
 
-	err := mysql.conn.DB.QueryRow(query, id).Scan(
+	rows, err := mysql.conn.DB.Query(query, id)
+	if err != nil {
+		log.Printf("Error getting raspberry_pi: %v", err)
+		return rpis, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var rpi entities.Raspberrypi
+		err := rows.Scan(
 		&rpi.ID,
 		&rpi.Mac,
 		&rpi.Nombre,
@@ -58,13 +67,17 @@ func (mysql *RaspberryPiMySQL) GetRaspberryPi(id int) (entities.Raspberrypi, err
 		&rpi.Fecha_Registro,
 		&rpi.Fecha_Ultima_Conexion)
 
-	if err != nil {
-		log.Printf("Error getting raspberry_pi: %v", err)
-		return rpi, err
-	}
+		if err != nil {
+			log.Printf("Error getting raspberry_pi: %v", err)
+			return rpis, err
+		}
 
-	return rpi, nil
-}
+		rpis = append(rpis, rpi)
+	}
+		return rpis, nil
+}			
+
+
 
 func (mysql *RaspberryPiMySQL) UpdateRaspberryPi(rpi entities.Raspberrypi) error {
 	query := `UPDATE raspberry_pi SET mac = ?, nombre = ?, modelo = ?, ip_address = ?, 
@@ -145,8 +158,8 @@ func (mysql *RaspberryPiMySQL) UpdateEstadoRaspberryPi(id int, estado string) er
 	return nil
 }		
 
-func (mysql *RaspberryPiMySQL) GetRaspberryPiByMac(mac string) ([]*entities.Raspberrypi, error) {
-	var rpis []*entities.Raspberrypi
+func (mysql *RaspberryPiMySQL) GetByMAC(mac string) ([]entities.Raspberrypi, error) {
+	var rpis []entities.Raspberrypi
 
 	query := `SELECT id, mac, nombre, modelo, ip_address, estado, fecha_registro, 
 		fecha_ultima_conexion FROM raspberry_pi WHERE mac = ?`
@@ -161,20 +174,20 @@ func (mysql *RaspberryPiMySQL) GetRaspberryPiByMac(mac string) ([]*entities.Rasp
 	for rows.Next() {
 		var rpi entities.Raspberrypi
 		err := rows.Scan(
-		&rpi.ID,
-		&rpi.Mac,	
-		&rpi.Nombre,
-		&rpi.Modelo,
-		&rpi.IP_Address,
-		&rpi.Estado,
-		&rpi.Fecha_Registro,
-		&rpi.Fecha_Ultima_Conexion)
+			&rpi.ID,
+			&rpi.Mac,	
+			&rpi.Nombre,
+			&rpi.Modelo,
+			&rpi.IP_Address,
+			&rpi.Estado,
+			&rpi.Fecha_Registro,
+			&rpi.Fecha_Ultima_Conexion)
 
-	if err != nil {
-		log.Printf("Error getting raspberry_pi by mac: %v", err)		
-		return rpis, err
-	}
-	rpis = append(rpis, &rpi)	
+		if err != nil {
+			log.Printf("Error scanning raspberry_pi by mac: %v", err)		
+			return rpis, err
+		}
+		rpis = append(rpis, rpi)	
 	}
 
 	return rpis, nil

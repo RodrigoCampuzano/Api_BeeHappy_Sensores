@@ -13,7 +13,7 @@ type SensoresController struct {
 	updateSensoresHandler *handlers.UpdateSensoresHandler
 	deleteSensoresHandler *handlers.DeleteSensoresHandler
 	getAllSensoresHandler *handlers.GetAllSensoresHandler
-	getByRaspberryIDHandler *handlers.GetRaspidHandler
+	getByRaspberryHandler *handlers.GetRaspidHandler
 	updateEstadoSensoresHandler *handlers.UpdateEstadoSensorHandler	
 }
 
@@ -24,7 +24,7 @@ func NewSensoresController(
 	deleteSensoresUseCase *sensores.DeleteSensoresUseCase,
 	getAllSensoresUseCase *sensores.GetAllSensoresUseCase,
 	updateEstadoSensoresUseCase *sensores.UpdateEstadoSensorUseCase,
-	getByRaspberryIDUseCase *sensores.GetByRaspberryUseCase,
+	getByRaspberryUseCase *sensores.GetByRaspberryUseCase,
 ) *SensoresController {
 	return &SensoresController{
 		createSensoresHandler: handlers.NewCreateSensoresHandler(createSensoresUseCase),
@@ -32,7 +32,7 @@ func NewSensoresController(
 		updateSensoresHandler: handlers.NewUpdateSensoresHandler(updateSensoresUseCase),
 		deleteSensoresHandler: handlers.NewDeleteSensoresHandler(deleteSensoresUseCase),
 		getAllSensoresHandler: handlers.NewGetAllSensoresHandler(getAllSensoresUseCase),
-		getByRaspberryIDHandler: handlers.NewGetRaspidHandler(getByRaspberryIDUseCase),
+		getByRaspberryHandler: handlers.NewGetRaspidHandler(getByRaspberryUseCase),
 		updateEstadoSensoresHandler: handlers.NewUpdateEstadoSensorHandler(updateEstadoSensoresUseCase),
 			}
 }
@@ -57,8 +57,8 @@ func (sc *SensoresController) GetAllSensores(ctx *gin.Context) {
 	sc.getAllSensoresHandler.Handle(ctx)
 }
 
-func (sc *SensoresController) GetByRaspberryID(ctx *gin.Context) {
-	sc.getByRaspberryIDHandler.Handle(ctx)
+func (sc *SensoresController) GetByRaspberry(ctx *gin.Context) {
+	sc.getByRaspberryHandler.Handle(ctx)
 }
 
 func (sc *SensoresController) UpdateEstadoSensores(ctx *gin.Context) {

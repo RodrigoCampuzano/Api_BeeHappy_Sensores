@@ -15,6 +15,6 @@ func NewGetByMACUseCase(repo repositories.RaspberryPiRepositories) *GetByMACUseC
 	}
 }
 
-func (uc *GetByMACUseCase) Execute(mac string) ([]*entities.Raspberrypi, error) {
+func (uc *GetByMACUseCase) Execute(mac string) ([]entities.Raspberrypi, error) {
 	return uc.repo.GetByMAC(mac)
 }
