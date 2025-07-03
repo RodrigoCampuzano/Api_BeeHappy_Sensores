@@ -2,16 +2,16 @@ package controllers
 
 import (
 	"apisensores/src/application/calibracion"
-	handlerscalibracion "apisensores/src/infraestructure/handlers/calibracion"
+	handlers "apisensores/src/infraestructure/handlers/calibracion"
 
 	"github.com/gin-gonic/gin"
 )
 
 type CalibracionController struct {
-	createCalibracionHandler *handlerscalibracion.CreateCalibracionHandler
-	getCalibracionHandler    *handlerscalibracion.GetCalibracionHandler
-	updateCalibracionHandler *handlerscalibracion.UpdateCalibracionHandler
-	deleteCalibracionHandler *handlerscalibracion.DeleteCalibracionHandler	
+	createCalibracionHandler *handlers.CreateCalibracionHandler
+	getCalibracionHandler    *handlers.GetCalibracionHandler
+	updateCalibracionHandler *handlers.UpdateCalibracionHandler
+	deleteCalibracionHandler *handlers.DeleteCalibracionHandler
 }
 
 func NewCalibracionController(
@@ -21,10 +21,10 @@ func NewCalibracionController(
 	deleteCalibracionUseCase *calibracion.DeleteCalibracionUseCase,
 ) *CalibracionController {
 	return &CalibracionController{
-		createCalibracionHandler: handlerscalibracion.NewCreateCalibracionHandler(createCalibracionUseCase),
-		getCalibracionHandler:    handlerscalibracion.NewGetCalibracionHandler(getCalibracionUseCase),
-		updateCalibracionHandler: handlerscalibracion.NewUpdateCalibracionHandler(updateCalibracionUseCase),
-		deleteCalibracionHandler: handlerscalibracion.NewDeleteCalibracionHandler(deleteCalibracionUseCase),
+		createCalibracionHandler: handlers.NewCreateCalibracionHandler(createCalibracionUseCase),
+		getCalibracionHandler:    handlers.NewGetCalibracionHandler(getCalibracionUseCase),
+		updateCalibracionHandler: handlers.NewUpdateCalibracionHandler(updateCalibracionUseCase),
+		deleteCalibracionHandler: handlers.NewDeleteCalibracionHandler(deleteCalibracionUseCase),
 	}
 }
 
