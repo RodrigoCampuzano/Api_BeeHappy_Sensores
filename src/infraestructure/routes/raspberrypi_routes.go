@@ -13,12 +13,12 @@ func RaspberryPiRoutes(r gin.IRouter, raspberryPiService *controllers.Raspberryp
 	raspberryGroup.Use(middleware.AuthMiddleware())
 	{
 		// Operaciones CRUD básicas 	
-		raspberryGroup.POST("/", raspberryPiService.CreateRaspberrypi)
-		raspberryGroup.GET("/:id", raspberryPiService.GetRaspberrypi)
-		raspberryGroup.PUT("/:id", raspberryPiService.UpdateRaspberrypi)
-		raspberryGroup.DELETE("/:id", raspberryPiService.DeleteRaspberrypi)
-		raspberryGroup.GET("/", raspberryPiService.GetAllRaspberrypi)
-		raspberryGroup.PUT("/:id/estado", raspberryPiService.UpdateEstadoRaspberrypi) 
+		raspberryGroup.POST("/", raspberryPiService.CreateRaspberryPi)
+		raspberryGroup.GET("/:id", raspberryPiService.GetRaspberryPi)
+		raspberryGroup.PUT("/:id", raspberryPiService.UpdateRaspberryPi)
+		raspberryGroup.DELETE("/:id", raspberryPiService.DeleteRaspberryPi)
+		raspberryGroup.GET("/", raspberryPiService.GetAllRaspberryPi)
+		raspberryGroup.PUT("/:id/estado", raspberryPiService.UpdateEstadoRaspberryPi) 
 		raspberryGroup.GET("/mac/:mac", raspberryPiService.GetByMAC)
 	}
 }

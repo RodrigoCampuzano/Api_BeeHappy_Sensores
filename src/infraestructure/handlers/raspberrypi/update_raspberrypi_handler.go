@@ -19,26 +19,37 @@ func NewUpdateRaspberrypiHandler(raspberrypiService *raspberrypi.UpdateRaspberry
 	}
 }
 
-func (h *UpdateRaspberrypiHandler) Handle(ctx *gin.Context) {
-	id := ctx.Param("id")
-	idInt, err := strconv.Atoi(id)
+func (h *UpdateRaspberrypiHandler) Handle(c *gin.Context) {
+	var rpi entities.Raspberrypi
+
+	// Obtener el ID de los parámetros
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
 
-	var raspberrypiData entities.Raspberrypi
-	if err := ctx.ShouldBindJSON(&raspberrypiData); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Datos de raspberry pi inválidos"})
+	// Bind del JSON request
+	if err := c.ShouldBindJSON(&rpi); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	raspberrypiData.ID = idInt
-	err = h.raspberrypiUpdateUseCase.Execute(raspberrypiData)
+	// Asignar el ID del path
+	rpi.ID = id
+
+	// Validar campos requeridos
+	if rpi.Mac == "" || rpi.Modelo == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "MAC y modelo son campos requeridos"})
+		return
+	}
+
+	// Llamar al caso de uso
+	err = h.raspberrypiUpdateUseCase.Execute(id, rpi)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Raspberry pi actualizada exitosamente"})
+	c.JSON(http.StatusOK, rpi)
 }

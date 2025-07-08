@@ -15,6 +15,6 @@ func NewUpdateRaspberryPiUseCase(repo repositories.RaspberryPiRepositories) *Upd
 	}
 }
 
-func (uc *UpdateRaspberryPiUseCase) Execute(raspberrypi entities.Raspberrypi) error {
-	return uc.repo.UpdateRaspberryPi(raspberrypi)
+func (uc *UpdateRaspberryPiUseCase) Execute(id int, raspberrypi entities.Raspberrypi) error {
+	return uc.repo.UpdateRaspberryPi(id, raspberrypi)
 }

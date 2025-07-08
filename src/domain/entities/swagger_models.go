@@ -121,3 +121,47 @@ type ColmenaRaspberryResponse struct {
 type ColmenaRaspberryListResponse struct {
 	ColmenasRaspberry []ColmenaRaspberryResponse `json:"colmenas_raspberry" description:"Lista de relaciones colmena-raspberry"`
 }
+
+// =============================
+// Estructuras para RaspberryPi
+// =============================
+
+// CreateRaspberryPiRequest Modelo para crear un dispositivo Raspberry Pi
+type CreateRaspberryPiRequest struct {
+	MAC_Address string `json:"mac" example:"00:11:22:33:44:55" binding:"required" description:"Dirección MAC del dispositivo"`
+	IP_Address  string `json:"ip_address" example:"192.168.1.100" binding:"required" description:"Dirección IP del dispositivo"`
+	Nombre      string `json:"nombre" example:"Raspberry-001" binding:"required" description:"Nombre identificativo del dispositivo"`
+	Modelo      string `json:"modelo" example:"Raspberry Pi 4B" binding:"required" description:"Modelo del dispositivo"`
+	Estado      string `json:"estado" example:"activo" binding:"required,oneof=activo inactivo" description:"Estado del dispositivo"`
+}
+
+// UpdateRaspberryPiRequest Modelo para actualizar un dispositivo Raspberry Pi
+type UpdateRaspberryPiRequest struct {
+	MAC_Address string `json:"mac" example:"00:11:22:33:44:55" description:"Dirección MAC del dispositivo"`
+	IP_Address  string `json:"ip_address" example:"192.168.1.100" description:"Dirección IP del dispositivo"`
+	Nombre      string `json:"nombre" example:"Raspberry-001" description:"Nombre identificativo del dispositivo"`
+	Estado      string `json:"estado" example:"activo" description:"Estado del dispositivo" binding:"required,oneof=activo inactivo"`
+	Modelo      string `json:"modelo" example:"Raspberry Pi 4B" binding:"required" description:"Modelo del dispositivo"`
+}
+
+// UpdateEstadoRaspberryPiRequest Modelo para actualizar el estado de un Raspberry Pi
+type UpdateEstadoRaspberryPiRequest struct {
+	Estado string `json:"estado" example:"inactivo" description:"Nuevo estado del dispositivo" binding:"required,oneof=activo inactivo"`
+}
+
+// RaspberryPiResponse Modelo de respuesta para Raspberry Pi
+type RaspberryPiResponse struct {
+	ID                    int     `json:"id" example:"1" description:"ID del dispositivo"`
+	MAC_Address           string  `json:"mac" example:"00:11:22:33:44:55" description:"Dirección MAC del dispositivo"`
+	IP_Address            string  `json:"ip_address" example:"192.168.1.100" description:"Dirección IP del dispositivo"`
+	Nombre                string  `json:"nombre" example:"Raspberry-001" description:"Nombre identificativo del dispositivo"`
+	Modelo                string  `json:"modelo" example:"Raspberry Pi 4B" description:"Modelo del dispositivo"`
+	Estado                string  `json:"estado" example:"activo" description:"Estado actual del dispositivo"`
+	Fecha_Registro        string  `json:"fecha_registro" example:"2024-03-20 10:00:00" description:"Fecha de registro del dispositivo"`
+	Fecha_Ultima_Conexion *string `json:"fecha_ultima_conexion,omitempty" example:"2024-03-20 10:00:00" description:"Última fecha de conexión"`
+}
+
+// RaspberryPiListResponse Modelo de respuesta para lista de Raspberry Pi
+type RaspberryPiListResponse struct {
+	RaspberryPis []RaspberryPiResponse `json:"raspberry_pis" description:"Lista de dispositivos Raspberry Pi"`
+}

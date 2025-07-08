@@ -141,11 +141,72 @@ definitions:
         example: Langstroth
         type: string
     type: object
+  entities.CreateRaspberryPiRequest:
+    properties:
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: activo
+        type: string
+      ip_address:
+        example: 192.168.1.100
+        type: string
+      mac:
+        example: "00:11:22:33:44:55"
+        type: string
+      modelo:
+        example: Raspberry Pi 4B
+        type: string
+      nombre:
+        example: Raspberry-001
+        type: string
+    required:
+    - estado
+    - ip_address
+    - mac
+    - modelo
+    - nombre
+    type: object
   entities.ErrorResponse:
     properties:
       error:
         description: Mensaje de error
         example: Credenciales inválidas. Por favor, verifique su usuario y contraseña
+        type: string
+    type: object
+  entities.RaspberryPiListResponse:
+    properties:
+      raspberry_pis:
+        items:
+          $ref: '#/definitions/entities.RaspberryPiResponse'
+        type: array
+    type: object
+  entities.RaspberryPiResponse:
+    properties:
+      estado:
+        example: activo
+        type: string
+      fecha_registro:
+        example: "2024-03-20 10:00:00"
+        type: string
+      fecha_ultima_conexion:
+        example: "2024-03-20 10:00:00"
+        type: string
+      id:
+        example: 1
+        type: integer
+      ip_address:
+        example: 192.168.1.100
+        type: string
+      mac:
+        example: "00:11:22:33:44:55"
+        type: string
+      modelo:
+        example: Raspberry Pi 4B
+        type: string
+      nombre:
+        example: Raspberry-001
         type: string
     type: object
   entities.UpdateCalibracionRequest:
@@ -217,6 +278,41 @@ definitions:
         type: string
     required:
     - estado
+    type: object
+  entities.UpdateEstadoRaspberryPiRequest:
+    properties:
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: inactivo
+        type: string
+    required:
+    - estado
+    type: object
+  entities.UpdateRaspberryPiRequest:
+    properties:
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: activo
+        type: string
+      ip_address:
+        example: 192.168.1.100
+        type: string
+      mac:
+        example: "00:11:22:33:44:55"
+        type: string
+      modelo:
+        example: Raspberry Pi 4B
+        type: string
+      nombre:
+        example: Raspberry-001
+        type: string
+    required:
+    - estado
+    - modelo
     type: object
 externalDocs:
   description: Autenticación API
@@ -698,6 +794,229 @@ paths:
       summary: Actualizar estado de colmena
       tags:
       - Colmena
+  /raspberry:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene la lista de todos los dispositivos Raspberry Pi
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.RaspberryPiListResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener todos los Raspberry Pi
+      tags:
+      - RaspberryPi
+    post:
+      consumes:
+      - application/json
+      description: Registra un nuevo dispositivo Raspberry Pi en el sistema
+      parameters:
+      - description: Datos del dispositivo
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateRaspberryPiRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.RaspberryPiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Crear un nuevo Raspberry Pi
+      tags:
+      - RaspberryPi
+  /raspberry/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina un dispositivo Raspberry Pi por su ID
+      parameters:
+      - description: ID del dispositivo
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Eliminar un Raspberry Pi
+      tags:
+      - RaspberryPi
+    get:
+      consumes:
+      - application/json
+      description: Obtiene los detalles de un dispositivo Raspberry Pi por su ID
+      parameters:
+      - description: ID del dispositivo
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.RaspberryPiResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener un Raspberry Pi
+      tags:
+      - RaspberryPi
+    put:
+      consumes:
+      - application/json
+      description: Actualiza los datos de un dispositivo Raspberry Pi existente
+      parameters:
+      - description: ID del dispositivo
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos de actualización
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateRaspberryPiRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.RaspberryPiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar un Raspberry Pi
+      tags:
+      - RaspberryPi
+  /raspberry/{id}/estado:
+    put:
+      consumes:
+      - application/json
+      description: Actualiza el estado de un dispositivo Raspberry Pi
+      parameters:
+      - description: ID del dispositivo
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Nuevo estado
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateEstadoRaspberryPiRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.RaspberryPiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar estado de Raspberry Pi
+      tags:
+      - RaspberryPi
+  /raspberry/mac/{mac}:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene un dispositivo Raspberry Pi por su dirección MAC
+      parameters:
+      - description: Dirección MAC del dispositivo
+        in: path
+        name: mac
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.RaspberryPiResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener Raspberry Pi por MAC
+      tags:
+      - RaspberryPi
 schemes:
 - http
 securityDefinitions:

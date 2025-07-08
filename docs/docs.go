@@ -749,6 +749,357 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/raspberry": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene la lista de todos los dispositivos Raspberry Pi",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RaspberryPi"
+                ],
+                "summary": "Obtener todos los Raspberry Pi",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.RaspberryPiListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Registra un nuevo dispositivo Raspberry Pi en el sistema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RaspberryPi"
+                ],
+                "summary": "Crear un nuevo Raspberry Pi",
+                "parameters": [
+                    {
+                        "description": "Datos del dispositivo",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateRaspberryPiRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/entities.RaspberryPiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/raspberry/mac/{mac}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene un dispositivo Raspberry Pi por su dirección MAC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RaspberryPi"
+                ],
+                "summary": "Obtener Raspberry Pi por MAC",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Dirección MAC del dispositivo",
+                        "name": "mac",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.RaspberryPiResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/raspberry/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene los detalles de un dispositivo Raspberry Pi por su ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RaspberryPi"
+                ],
+                "summary": "Obtener un Raspberry Pi",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del dispositivo",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.RaspberryPiResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Actualiza los datos de un dispositivo Raspberry Pi existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RaspberryPi"
+                ],
+                "summary": "Actualizar un Raspberry Pi",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del dispositivo",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos de actualización",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateRaspberryPiRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.RaspberryPiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Elimina un dispositivo Raspberry Pi por su ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RaspberryPi"
+                ],
+                "summary": "Eliminar un Raspberry Pi",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del dispositivo",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/raspberry/{id}/estado": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Actualiza el estado de un dispositivo Raspberry Pi",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "RaspberryPi"
+                ],
+                "summary": "Actualizar estado de Raspberry Pi",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del dispositivo",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Nuevo estado",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateEstadoRaspberryPiRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.RaspberryPiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -948,6 +1299,42 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.CreateRaspberryPiRequest": {
+            "type": "object",
+            "required": [
+                "estado",
+                "ip_address",
+                "mac",
+                "modelo",
+                "nombre"
+            ],
+            "properties": {
+                "estado": {
+                    "type": "string",
+                    "enum": [
+                        "activo",
+                        "inactivo"
+                    ],
+                    "example": "activo"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "example": "192.168.1.100"
+                },
+                "mac": {
+                    "type": "string",
+                    "example": "00:11:22:33:44:55"
+                },
+                "modelo": {
+                    "type": "string",
+                    "example": "Raspberry Pi 4B"
+                },
+                "nombre": {
+                    "type": "string",
+                    "example": "Raspberry-001"
+                }
+            }
+        },
         "entities.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -955,6 +1342,54 @@ const docTemplate = `{
                     "description": "Mensaje de error",
                     "type": "string",
                     "example": "Credenciales inválidas. Por favor, verifique su usuario y contraseña"
+                }
+            }
+        },
+        "entities.RaspberryPiListResponse": {
+            "type": "object",
+            "properties": {
+                "raspberry_pis": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.RaspberryPiResponse"
+                    }
+                }
+            }
+        },
+        "entities.RaspberryPiResponse": {
+            "type": "object",
+            "properties": {
+                "estado": {
+                    "type": "string",
+                    "example": "activo"
+                },
+                "fecha_registro": {
+                    "type": "string",
+                    "example": "2024-03-20 10:00:00"
+                },
+                "fecha_ultima_conexion": {
+                    "type": "string",
+                    "example": "2024-03-20 10:00:00"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "ip_address": {
+                    "type": "string",
+                    "example": "192.168.1.100"
+                },
+                "mac": {
+                    "type": "string",
+                    "example": "00:11:22:33:44:55"
+                },
+                "modelo": {
+                    "type": "string",
+                    "example": "Raspberry Pi 4B"
+                },
+                "nombre": {
+                    "type": "string",
+                    "example": "Raspberry-001"
                 }
             }
         },
@@ -1053,6 +1488,55 @@ const docTemplate = `{
                         "inactivo"
                     ],
                     "example": "inactivo"
+                }
+            }
+        },
+        "entities.UpdateEstadoRaspberryPiRequest": {
+            "type": "object",
+            "required": [
+                "estado"
+            ],
+            "properties": {
+                "estado": {
+                    "type": "string",
+                    "enum": [
+                        "activo",
+                        "inactivo"
+                    ],
+                    "example": "inactivo"
+                }
+            }
+        },
+        "entities.UpdateRaspberryPiRequest": {
+            "type": "object",
+            "required": [
+                "estado",
+                "modelo"
+            ],
+            "properties": {
+                "estado": {
+                    "type": "string",
+                    "enum": [
+                        "activo",
+                        "inactivo"
+                    ],
+                    "example": "activo"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "example": "192.168.1.100"
+                },
+                "mac": {
+                    "type": "string",
+                    "example": "00:11:22:33:44:55"
+                },
+                "modelo": {
+                    "type": "string",
+                    "example": "Raspberry Pi 4B"
+                },
+                "nombre": {
+                    "type": "string",
+                    "example": "Raspberry-001"
                 }
             }
         }

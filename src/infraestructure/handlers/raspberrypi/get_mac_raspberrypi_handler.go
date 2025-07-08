@@ -24,17 +24,17 @@ func (h *GetMacRaspberrypiHandler) Handle(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	if len(raspberrypi) == 0 {
+	if raspberrypi.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Raspberry Pi no encontrada"})
 		return
 	}	
 
-	if raspberrypi[0].ID == 0 {
+	if raspberrypi.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Raspberry Pi no encontrada"})
 		return
 	}
 
-	if raspberrypi[0].Mac == "" {	
+	if raspberrypi.Mac == "" {	
 		c.JSON(http.StatusNotFound, gin.H{"error": "MAC no encontrado"})
 		return
 	}
