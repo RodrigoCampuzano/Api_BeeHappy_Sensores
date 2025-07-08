@@ -9,7 +9,7 @@ import (
 
 func ColmenaRoutes(r gin.IRouter, colmenaService *controllers.ColmenaController) {
 	// Grupo de colmenas
-	colmenaGroup := r.(*gin.RouterGroup).Group("/colmenas")
+	colmenaGroup := r.(*gin.RouterGroup).Group("/colmena") // Cambiado a singular para coincidir con Swagger
 	colmenaGroup.Use(middleware.AuthMiddleware())
 	{
 		// Operaciones CRUD básicas
@@ -17,7 +17,7 @@ func ColmenaRoutes(r gin.IRouter, colmenaService *controllers.ColmenaController)
 		colmenaGroup.GET("/:id", colmenaService.GetColmena)
 		colmenaGroup.PUT("/:id", colmenaService.UpdateColmena)
 		colmenaGroup.DELETE("/:id", colmenaService.DeleteColmena)
-		colmenaGroup.GET("/", colmenaService.GetColmena)
-		colmenaGroup.PUT("/:id/estado", colmenaService.UpdateColmena) 
+		colmenaGroup.GET("/", colmenaService.GetAllColmenas)
+		colmenaGroup.PUT("/:id/estado", colmenaService.UpdateEstadoColmena)
 	}
 }

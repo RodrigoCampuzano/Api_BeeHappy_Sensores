@@ -16,6 +16,6 @@ func ColmenaRaspberryRoutes(r gin.IRouter, colmenaRaspberryService *controllers.
 		colmenaRaspberryGroup.POST("/", colmenaRaspberryService.CreateColmenaRaspberry)
 		colmenaRaspberryGroup.GET("/:id", colmenaRaspberryService.GetColmenaRaspberry)
 		colmenaRaspberryGroup.PUT("/:id", colmenaRaspberryService.UpdateColmenaRaspberry)
-		colmenaRaspberryGroup.DELETE("/:id", colmenaRaspberryService.DeleteColmenaRaspberry)  
+		colmenaRaspberryGroup.DELETE("/:id", colmenaRaspberryService.DeleteColmenaRaspberry)
 	}
 }

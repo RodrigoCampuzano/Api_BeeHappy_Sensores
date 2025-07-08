@@ -3,8 +3,9 @@ package mysql
 import (
 	core "apisensores/src/core/db"
 	"apisensores/src/domain/entities"
+	"database/sql"
+	"fmt"
 	"log"
-	"time"
 )
 
 type ColmenaMySQL struct {
@@ -67,32 +68,71 @@ func (mysql *ColmenaMySQL) GetColmena(id int) (entities.Colmenas, error) {
 }
 
 func (mysql *ColmenaMySQL) UpdateColmena(colmena entities.Colmenas) error {
-	query := `UPDATE colmenas SET identificador = ?, nombre = ?, area_ubicacion = ?, 
-		tipo_colmena = ?, estado = ?, fecha_actualizacion = ? WHERE id = ?`
+	// Primero verificamos si la colmena existe
+	checkQuery := `SELECT id FROM colmenas WHERE id = ?`
+	var existingID int
+	err := mysql.conn.DB.QueryRow(checkQuery, colmena.ID).Scan(&existingID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return fmt.Errorf("colmena no encontrada")
+		}
+		return err
+	}
 
-	_, err := mysql.conn.DB.Exec(query,
+	// Si existe, procedemos a actualizar
+	query := `
+        UPDATE colmenas 
+        SET identificador = ?, 
+            nombre = ?, 
+            area_ubicacion = ?, 
+            tipo_colmena = ?, 
+            estado = ?,
+            fecha_actualizacion = CURRENT_TIMESTAMP
+        WHERE id = ?
+    `
+
+	result, err := mysql.conn.DB.Exec(query,
 		colmena.Identificador,
 		colmena.Nombre,
 		colmena.Area_Ubicacion,
 		colmena.Tipo_Colmena,
 		colmena.Estado,
-		time.Now(),
 		colmena.ID)
 
 	if err != nil {
-		log.Printf("Error updating colmena: %v", err)
+		log.Printf("Error actualizando colmena: %v", err)
 		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no se actualizó ninguna colmena")
 	}
 
 	return nil
 }
 
 func (mysql *ColmenaMySQL) DeleteColmena(id int) error {
-	query := `DELETE FROM colmenas WHERE id = ?`
-
-	_, err := mysql.conn.DB.Exec(query, id)
+	// Primero verificamos si la colmena existe
+	query := `SELECT id FROM colmenas WHERE id = ?`
+	var existingID int
+	err := mysql.conn.DB.QueryRow(query, id).Scan(&existingID)
 	if err != nil {
-		log.Printf("Error deleting colmena: %v", err)
+		if err == sql.ErrNoRows {
+			return fmt.Errorf("colmena no encontrada")
+		}
+		return err
+	}
+
+	// Si existe, procedemos a eliminar
+	deleteQuery := `DELETE FROM colmenas WHERE id = ?`
+	_, err = mysql.conn.DB.Exec(deleteQuery, id)
+	if err != nil {
+		log.Printf("Error al eliminar colmena: %v", err)
 		return err
 	}
 
@@ -122,7 +162,7 @@ func (mysql *ColmenaMySQL) GetAllColmenas() ([]entities.Colmenas, error) {
 			&colmena.Tipo_Colmena,
 			&colmena.Estado,
 			&colmena.Fecha_Registro,
-			&colmena.Fecha_Actualizacion)	
+			&colmena.Fecha_Actualizacion)
 		if err != nil {
 			log.Printf("Error scanning colmena: %v", err)
 			return colmenas, err
@@ -131,16 +171,55 @@ func (mysql *ColmenaMySQL) GetAllColmenas() ([]entities.Colmenas, error) {
 	}
 
 	return colmenas, nil
-}	
+}
 
 func (mysql *ColmenaMySQL) UpdateEstadoColmena(id int, estado string) error {
-	query := `UPDATE colmenas SET estado = ? WHERE id = ?`
-
-	_, err := mysql.conn.DB.Exec(query, estado, id)
+	// Primero verificamos si la colmena existe
+	checkQuery := `SELECT id FROM colmenas WHERE id = ?`
+	var existingID int
+	err := mysql.conn.DB.QueryRow(checkQuery, id).Scan(&existingID)
 	if err != nil {
-		log.Printf("Error updating estado colmena: %v", err)
+		if err == sql.ErrNoRows {
+			return fmt.Errorf("colmena no encontrada")
+		}
 		return err
 	}
 
+	// Validamos el estado
+	estadosValidos := []string{"activo", "inactivo"}
+	estadoValido := false
+	for _, e := range estadosValidos {
+		if e == estado {
+			estadoValido = true
+			break
+		}
+	}
+	if !estadoValido {
+		return fmt.Errorf("estado no válido. Debe ser 'activo' o 'inactivo'")
+	}
+
+	// Si existe y el estado es válido, procedemos a actualizar
+	query := `
+        UPDATE colmenas 
+        SET estado = ?,
+            fecha_actualizacion = CURRENT_TIMESTAMP
+        WHERE id = ?
+    `
+
+	result, err := mysql.conn.DB.Exec(query, estado, id)
+	if err != nil {
+		log.Printf("Error actualizando estado de colmena: %v", err)
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no se actualizó ninguna colmena")
+	}
+
 	return nil
-}	
+}

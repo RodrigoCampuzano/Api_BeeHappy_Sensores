@@ -6,6 +6,8 @@ import (
 	"apisensores/src/infraestructure"
 	"log"
 
+	_ "apisensores/docs" // Esto es importante: importa los docs generados
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -27,9 +29,13 @@ import (
 // @BasePath /api/v1
 // @schemes http
 
-// @securityDefinitions.apikey Bearer
+// @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
+// @description Introduce el token Bearer. Ejemplo: "Bearer {token}"
+
+// @externalDocs.description Autenticación API
+// @externalDocs.url http://localhost:8081/swagger/index.html
 func main() {
 	r := gin.Default()
 
@@ -37,13 +43,7 @@ func main() {
 	r.Use(middleware.MiddlewareCORS())
 
 	// Configuración de Swagger
-	config := &ginSwagger.Config{
-		URL:                      "http://localhost:8080/swagger/doc.json",
-		DeepLinking:              true,
-		DocExpansion:             "list",
-		DefaultModelsExpandDepth: 1,
-	}
-	r.GET("/swagger/*any", ginSwagger.CustomWrapHandler(config, swaggerFiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Grupo base para la API v1
 	api := r.Group("/api/v1")

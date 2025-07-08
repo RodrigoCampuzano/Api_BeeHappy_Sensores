@@ -41,7 +41,7 @@ func InitColmena(r gin.IRouter) {
 func InitColmenaRaspberry(r gin.IRouter) {
 	repo := mysql.NewColmenaRaspberryMySQL()
 	createHandler := colmena_raspberry.NewCreateColmenaRaspberryUseCase(repo)
-	getHandler := colmena_raspberry.NewGetByColmenaUseCase(repo)
+	getHandler := colmena_raspberry.NewGetByColmenaRaspberryUseCase(repo)
 	updateHandler := colmena_raspberry.NewUpdateColmenaRaspberryUseCase(repo)
 	deleteHandler := colmena_raspberry.NewDeleteColmenaRaspberryUseCase(repo)
 	controller := controllers.NewColmenaRaspberryController(createHandler, getHandler, updateHandler, deleteHandler)

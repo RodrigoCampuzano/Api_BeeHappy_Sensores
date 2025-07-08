@@ -5,16 +5,16 @@ import (
 	"apisensores/src/domain/repositories"
 )
 
-type GetByColmenaUseCase struct {
+type GetByColmenaRaspberryUseCase struct {
 	repo repositories.ColmenaRaspberryRepositories
 }
 
-func NewGetByColmenaUseCase(repo repositories.ColmenaRaspberryRepositories) *GetByColmenaUseCase {
-	return &GetByColmenaUseCase{
+func NewGetByColmenaRaspberryUseCase(repo repositories.ColmenaRaspberryRepositories) *GetByColmenaRaspberryUseCase {
+	return &GetByColmenaRaspberryUseCase{
 		repo: repo,
 	}
 }
 
-func (uc *GetByColmenaUseCase) Execute(id int) (entities.ColmenaRaspberryPi, error) {
+func (uc *GetByColmenaRaspberryUseCase) Execute(id int) (entities.ColmenaRaspberryPi, error) {
 	return uc.repo.GetColmenaRaspberry(id)
 }

@@ -1,0 +1,709 @@
+basePath: /api/v1
+definitions:
+  entities.CalibracionResponse:
+    properties:
+      factor_calibracion:
+        example: 1.5
+        type: number
+      fecha_calibracion:
+        example: "2024-03-20T10:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      id_colmena:
+        example: 1
+        type: integer
+      id_sensor:
+        example: 1
+        type: integer
+      offset_calibracion:
+        example: 0.5
+        type: number
+      valor_maximo:
+        example: 30.5
+        type: number
+      valor_minimo:
+        example: 20.5
+        type: number
+    type: object
+  entities.ColmenaRaspberryResponse:
+    properties:
+      created_at:
+        example: "2024-03-20T10:00:00Z"
+        type: string
+      estado:
+        example: activo
+        type: string
+      id:
+        example: 1
+        type: integer
+      id_colmena:
+        example: 1
+        type: integer
+      id_raspberry:
+        example: 1
+        type: integer
+      updated_at:
+        example: "2024-03-20T10:00:00Z"
+        type: string
+    type: object
+  entities.ColmenaResponse:
+    properties:
+      area_ubicacion:
+        example: Sector Norte
+        type: string
+      estado:
+        example: activo
+        type: string
+      fecha_actualizacion:
+        example: "2024-03-20 10:00:00"
+        type: string
+      fecha_registro:
+        example: "2024-03-20 10:00:00"
+        type: string
+      id:
+        example: 1
+        type: integer
+      identificador:
+        example: COL-001
+        type: string
+      nombre:
+        example: Colmena Principal
+        type: string
+      tipo_colmena:
+        example: Langstroth
+        type: string
+    type: object
+  entities.ColmenasListResponse:
+    properties:
+      colmenas:
+        items:
+          $ref: '#/definitions/entities.ColmenaResponse'
+        type: array
+    type: object
+  entities.CreateCalibracionRequest:
+    properties:
+      factor_calibracion:
+        example: 1.5
+        type: number
+      fecha_calibracion:
+        example: "2024-03-20T10:00:00Z"
+        type: string
+      id_colmena:
+        example: 1
+        type: integer
+      id_sensor:
+        example: 1
+        type: integer
+      offset_calibracion:
+        example: 0.5
+        type: number
+      valor_maximo:
+        example: 30.5
+        type: number
+      valor_minimo:
+        example: 20.5
+        type: number
+    type: object
+  entities.CreateColmenaRaspberryRequest:
+    properties:
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: activo
+        type: string
+      id_colmena:
+        example: 1
+        type: integer
+      id_raspberry:
+        example: 1
+        type: integer
+    required:
+    - estado
+    type: object
+  entities.CreateColmenaRequest:
+    properties:
+      area_ubicacion:
+        example: Sector Norte
+        type: string
+      estado:
+        example: activo
+        type: string
+      identificador:
+        example: COL-001
+        type: string
+      nombre:
+        example: Colmena Principal
+        type: string
+      tipo_colmena:
+        example: Langstroth
+        type: string
+    type: object
+  entities.ErrorResponse:
+    properties:
+      error:
+        description: Mensaje de error
+        example: Credenciales inválidas. Por favor, verifique su usuario y contraseña
+        type: string
+    type: object
+  entities.UpdateCalibracionRequest:
+    properties:
+      factor_calibracion:
+        example: 1.5
+        type: number
+      fecha_calibracion:
+        example: "2024-03-20T10:00:00Z"
+        type: string
+      id_colmena:
+        example: 1
+        type: integer
+      id_sensor:
+        example: 1
+        type: integer
+      offset_calibracion:
+        example: 0.5
+        type: number
+      valor_maximo:
+        example: 30.5
+        type: number
+      valor_minimo:
+        example: 20.5
+        type: number
+    type: object
+  entities.UpdateColmenaRaspberryRequest:
+    properties:
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: activo
+        type: string
+      id_colmena:
+        example: 1
+        type: integer
+      id_raspberry:
+        example: 1
+        type: integer
+    required:
+    - estado
+    type: object
+  entities.UpdateColmenaRequest:
+    properties:
+      area_ubicacion:
+        example: Sector Norte
+        type: string
+      estado:
+        example: activo
+        type: string
+      identificador:
+        example: COL-001
+        type: string
+      nombre:
+        example: Colmena Principal
+        type: string
+      tipo_colmena:
+        example: Langstroth
+        type: string
+    type: object
+  entities.UpdateEstadoColmenaRequest:
+    properties:
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: inactivo
+        type: string
+    required:
+    - estado
+    type: object
+externalDocs:
+  description: Autenticación API
+  url: http://localhost:8081/swagger/index.html
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API para la gestión de sensores en colmenas
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: API de Sensores para Colmenas
+  version: "1.0"
+paths:
+  /calibracion:
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo registro de calibración para un sensor
+      parameters:
+      - description: Datos de la calibración
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateCalibracionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.CalibracionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: No autorizado
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Crear una nueva calibración
+      tags:
+      - Calibración
+  /calibracion/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina una calibración por su ID
+      parameters:
+      - description: ID de la calibración
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Eliminar una calibración
+      tags:
+      - Calibración
+    get:
+      consumes:
+      - application/json
+      description: Obtiene los detalles de una calibración por su ID
+      parameters:
+      - description: ID de la calibración
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CalibracionResponse'
+        "401":
+          description: No autorizado
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener una calibración
+      tags:
+      - Calibración
+    put:
+      consumes:
+      - application/json
+      description: Actualiza los datos de una calibración existente
+      parameters:
+      - description: ID de la calibración
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos de actualización
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateCalibracionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CalibracionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar una calibración
+      tags:
+      - Calibración
+  /colmena:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene la lista de todas las colmenas registradas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ColmenasListResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener todas las colmenas
+      tags:
+      - Colmena
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo registro de colmena
+      parameters:
+      - description: Datos de la colmena
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateColmenaRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.ColmenaResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Crear una nueva colmena
+      tags:
+      - Colmena
+  /colmena-raspberry:
+    post:
+      consumes:
+      - application/json
+      description: Crea una nueva relación entre una colmena y un dispositivo Raspberry
+        Pi
+      parameters:
+      - description: Datos de la relación
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateColmenaRaspberryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.ColmenaRaspberryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Crear una nueva relación colmena-raspberry
+      tags:
+      - Colmena-Raspberry
+  /colmena-raspberry/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina una relación existente entre colmena y Raspberry Pi
+      parameters:
+      - description: ID de la relación
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Eliminar una relación colmena-raspberry
+      tags:
+      - Colmena-Raspberry
+    get:
+      consumes:
+      - application/json
+      description: Obtiene los detalles de una relación colmena-raspberry por su ID
+      parameters:
+      - description: ID de la relación
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ColmenaRaspberryResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener relación colmena-raspberry por ID
+      tags:
+      - Colmena-Raspberry
+    put:
+      consumes:
+      - application/json
+      description: Actualiza una relación existente entre colmena y Raspberry Pi
+      parameters:
+      - description: ID de la relación
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos de actualización
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateColmenaRaspberryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ColmenaRaspberryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar una relación colmena-raspberry
+      tags:
+      - Colmena-Raspberry
+  /colmena/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina una colmena por su ID
+      parameters:
+      - description: ID de la colmena
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Eliminar una colmena
+      tags:
+      - Colmena
+    get:
+      consumes:
+      - application/json
+      description: Obtiene los detalles de una colmena por su ID
+      parameters:
+      - description: ID de la colmena
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ColmenaResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener una colmena
+      tags:
+      - Colmena
+    put:
+      consumes:
+      - application/json
+      description: Actualiza los datos de una colmena existente
+      parameters:
+      - description: ID de la colmena
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos de actualización
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateColmenaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ColmenaResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar una colmena
+      tags:
+      - Colmena
+  /colmena/{id}/estado:
+    put:
+      consumes:
+      - application/json
+      description: Actualiza el estado de una colmena existente
+      parameters:
+      - description: ID de la colmena
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Nuevo estado
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateEstadoColmenaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ColmenaResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar estado de colmena
+      tags:
+      - Colmena
+schemes:
+- http
+securityDefinitions:
+  ApiKeyAuth:
+    description: 'Introduce el token Bearer. Ejemplo: "Bearer {token}"'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

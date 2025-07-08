@@ -1,8 +1,10 @@
 package mysql
 
 import (
-	"apisensores/src/domain/entities"
 	core "apisensores/src/core/db"
+	"apisensores/src/domain/entities"
+	"database/sql"
+	"fmt"
 	"log"
 )
 
@@ -40,39 +42,69 @@ func (mysql *ColmenaRaspberryMySQL) CreateColmenaRaspberry(cr entities.ColmenaRa
 }
 
 func (mysql *ColmenaRaspberryMySQL) GetColmenaRaspberry(id int) (entities.ColmenaRaspberryPi, error) {
-	var cr entities.ColmenaRaspberryPi
 
+	var colmenaRaspberry entities.ColmenaRaspberryPi
 	query := `SELECT id, id_colmena, id_raspberry, fecha_asignacion, estado 
 		FROM colmena_raspberry WHERE id = ?`
 
 	err := mysql.conn.DB.QueryRow(query, id).Scan(
-		&cr.ID,
-		&cr.ID_Colmena,
-		&cr.ID_Raspberry,
-		&cr.Fecha_Asignacion,
-		&cr.Estado)
+		&colmenaRaspberry.ID,
+		&colmenaRaspberry.ID_Colmena,
+		&colmenaRaspberry.ID_Raspberry,
+		&colmenaRaspberry.Fecha_Asignacion,
+		&colmenaRaspberry.Estado)
 
 	if err != nil {
-		log.Printf("Error getting colmena_raspberry: %v", err)
-		return cr, err
+		if err == sql.ErrNoRows {
+			return colmenaRaspberry, fmt.Errorf("relación colmena-raspberry no encontrada")
+		}
+		log.Printf("Error obteniendo colmena-raspberry: %v", err)
+		return colmenaRaspberry, err
 	}
 
-	return cr, nil
+	return colmenaRaspberry, nil
 }
 
 func (mysql *ColmenaRaspberryMySQL) UpdateColmenaRaspberry(cr entities.ColmenaRaspberryPi) error {
-	query := `UPDATE colmena_raspberry SET id_colmena = ?, id_raspberry = ?, estado = ? 
-		WHERE id = ?`
 
-	_, err := mysql.conn.DB.Exec(query,
+	// Primero verificamos si existe
+	checkQuery := `SELECT id FROM colmena_raspberry WHERE id = ?`
+	var existingID int
+	err := mysql.conn.DB.QueryRow(checkQuery, cr.ID).Scan(&existingID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return fmt.Errorf("relación colmena-raspberry no encontrada")
+		}
+		return err
+	}
+
+	// Si existe, actualizamos
+	query := `
+        UPDATE colmena_raspberry 
+        SET id_colmena = ?,
+            id_raspberry = ?,
+            estado = ?
+        WHERE id = ?
+    `
+
+	result, err := mysql.conn.DB.Exec(query,
 		cr.ID_Colmena,
 		cr.ID_Raspberry,
 		cr.Estado,
 		cr.ID)
 
 	if err != nil {
-		log.Printf("Error updating colmena_raspberry: %v", err)
+		log.Printf("Error actualizando colmena-raspberry: %v", err)
 		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no se actualizó ninguna relación colmena-raspberry")
 	}
 
 	return nil

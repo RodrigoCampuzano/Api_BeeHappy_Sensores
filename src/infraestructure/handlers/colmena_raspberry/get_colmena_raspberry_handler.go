@@ -9,10 +9,10 @@ import (
 )
 
 type GetColmenaRaspberryHandler struct {
-	colmenaRaspberryGetUseCase *colmena_raspberry.GetByColmenaUseCase
+	colmenaRaspberryGetUseCase *colmena_raspberry.GetByColmenaRaspberryUseCase	
 }
 
-func NewGetColmenaRaspberryHandler(colmenaRaspberryService *colmena_raspberry.GetByColmenaUseCase) *GetColmenaRaspberryHandler {
+func NewGetColmenaRaspberryHandler(colmenaRaspberryService *colmena_raspberry.GetByColmenaRaspberryUseCase) *GetColmenaRaspberryHandler {
 	return &GetColmenaRaspberryHandler{
 		colmenaRaspberryGetUseCase: colmenaRaspberryService,
 	}
