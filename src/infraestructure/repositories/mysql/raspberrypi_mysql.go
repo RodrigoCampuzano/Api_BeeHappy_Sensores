@@ -180,7 +180,7 @@ func (mysql *RaspberryPiMySQL) GetAllRaspberryPi() ([]entities.Raspberrypi, erro
 	}
 
 	return raspberries, nil
-}
+}	
 
 func (mysql *RaspberryPiMySQL) UpdateEstadoRaspberryPi(id int, estado string) error {
 	query := `UPDATE raspberry_pi SET estado = ? WHERE id = ?`
@@ -190,9 +190,9 @@ func (mysql *RaspberryPiMySQL) UpdateEstadoRaspberryPi(id int, estado string) er
 		log.Printf("Error updating estado raspberry_pi: %v", err)
 		return err
 	}
-
+	
 	return nil
-}
+}		
 
 func (mysql *RaspberryPiMySQL) GetByMAC(mac string) (entities.Raspberrypi, error) {
 	var raspberry entities.Raspberrypi
@@ -229,3 +229,4 @@ func (mysql *RaspberryPiMySQL) GetByMAC(mac string) (entities.Raspberrypi, error
 
 	return raspberry, nil
 }
+	

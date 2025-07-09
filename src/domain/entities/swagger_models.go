@@ -165,3 +165,39 @@ type RaspberryPiResponse struct {
 type RaspberryPiListResponse struct {
 	RaspberryPis []RaspberryPiResponse `json:"raspberry_pis" description:"Lista de dispositivos Raspberry Pi"`
 }
+
+
+
+// =============================
+// Estrcuturas para Sensor
+// =============================
+
+// CreateSensorRequest Modelo para crear un sensor
+type CreateSensorRequest struct {
+	ID_Tipo_Sensor  int `json:"id_tipo_sensor" example:"1" description:"ID del tipo de sensor"`
+	ID_Raspberry    int `json:"id_raspberry" example:"1" description:"ID del dispositivo Raspberry Pi"`
+	Pin_conexion    string `json:"pin_conexion" example:"1" description:"Pin de conexión del sensor"`
+	Direccion_i2c   string `json:"direccion_i2c" example:"1" description:"Dirección I2C del sensor"`
+	Estado          string `json:"estado" example:"activo" description:"Estado del sensor" binding:"required,oneof=activo inactivo"`
+	Fecha_Registro  string `json:"fecha_registro" example:"2024-03-20 10:00:00" description:"Fecha de registro del sensor"`
+}
+
+// UpdateSensorRequest Modelo para actualizar un sensor
+type UpdateSensorRequest struct {
+	ID_Tipo_Sensor  int `json:"id_tipo_sensor" example:"1" description:"ID del tipo de sensor"`
+	ID_Raspberry    int `json:"id_raspberry" example:"1" description:"ID del dispositivo Raspberry Pi"`
+	Pin_conexion    string `json:"pin_conexion" example:"1" description:"Pin de conexión del sensor"`
+	Direccion_i2c   string `json:"direccion_i2c" example:"1" description:"Dirección I2C del sensor"`
+	Estado          string `json:"estado" example:"activo" description:"Estado del sensor" binding:"required,oneof=activo inactivo"`
+}
+
+// SensorResponse Modelo de respuesta para sensor
+type SensorResponse struct {
+	ID              int `json:"id" example:"1" description:"ID del sensor"`
+	ID_Tipo_Sensor  int `json:"id_tipo_sensor" example:"1" description:"ID del tipo de sensor"`
+	ID_Raspberry    int `json:"id_raspberry" example:"1" description:"ID del dispositivo Raspberry Pi"`
+	Pin_conexion    string `json:"pin_conexion" example:"1" description:"Pin de conexión del sensor"`
+	Direccion_i2c   string `json:"direccion_i2c" example:"1" description:"Dirección I2C del sensor"`
+	Estado          string `json:"estado" example:"activo" description:"Estado del sensor"`
+	Fecha_Registro  string `json:"fecha_registro" example:"2024-03-20 10:00:00" description:"Fecha de registro del sensor"`
+}

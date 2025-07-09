@@ -10,26 +10,25 @@ import (
 )
 
 type UpdateRaspberrypiHandler struct {
-	raspberrypiUpdateUseCase *raspberrypi.UpdateRaspberryPiUseCase
+	updateRaspberrypiUseCase *raspberrypi.UpdateRaspberryPiUseCase
 }
 
-func NewUpdateRaspberrypiHandler(raspberrypiService *raspberrypi.UpdateRaspberryPiUseCase) *UpdateRaspberrypiHandler {
+func NewUpdateRaspberrypiHandler(useCase *raspberrypi.UpdateRaspberryPiUseCase) *UpdateRaspberrypiHandler {
 	return &UpdateRaspberrypiHandler{
-		raspberrypiUpdateUseCase: raspberrypiService,
+		updateRaspberrypiUseCase: useCase,
 	}
 }
 
 func (h *UpdateRaspberrypiHandler) Handle(c *gin.Context) {
-	var rpi entities.Raspberrypi
-
-	// Obtener el ID de los parámetros
+	// Obtener ID del path
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
 		return
 	}
 
-	// Bind del JSON request
+	// Obtener datos actuales del Raspberry Pi
+	var rpi entities.Raspberrypi
 	if err := c.ShouldBindJSON(&rpi); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -38,14 +37,8 @@ func (h *UpdateRaspberrypiHandler) Handle(c *gin.Context) {
 	// Asignar el ID del path
 	rpi.ID = id
 
-	// Validar campos requeridos
-	if rpi.Mac == "" || rpi.Modelo == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "MAC y modelo son campos requeridos"})
-		return
-	}
-
-	// Llamar al caso de uso
-	err = h.raspberrypiUpdateUseCase.Execute(id, rpi)
+	// Ejecutar el caso de uso
+	err = h.updateRaspberrypiUseCase.Execute(id, rpi)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
