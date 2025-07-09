@@ -1097,6 +1097,716 @@
                     }
                 }
             }
+        },
+        "/sensores": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene todos los sensores registrados",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Obtener todos los sensores",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.SensorResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Crea un nuevo sensor en la base de datos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Crear un sensor",
+                "parameters": [
+                    {
+                        "description": "Sensor a crear",
+                        "name": "sensor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateSensorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.SensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sensores/raspberry/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene todos los sensores asociados a un Raspberry Pi",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Obtener sensores por Raspberry Pi",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del Raspberry Pi",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.SensorResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sensores/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene un sensor por su ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Obtener un sensor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del sensor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.SensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Actualiza un sensor existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Actualizar un sensor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del sensor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Sensor a actualizar",
+                        "name": "sensor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateSensorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.SensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Elimina un sensor existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Eliminar un sensor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del sensor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sensores/{id}/estado": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Actualiza el estado de un sensor existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Actualizar el estado de un sensor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del sensor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Estado a actualizar",
+                        "name": "estado",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateEstadoSensorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tipos-sensores": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene todos los tipos de sensores de la base de datos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipo Sensores"
+                ],
+                "summary": "Obtener todos los tipos de sensores",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tipos de sensores obtenida exitosamente",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.TipoSensorResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Crea un nuevo tipo de sensor en la base de datos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipo Sensores"
+                ],
+                "summary": "Crear un nuevo tipo de sensor",
+                "parameters": [
+                    {
+                        "description": "Tipo de sensor a crear",
+                        "name": "TipoSensor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateTipoSensorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Tipo de sensor creado exitosamente",
+                        "schema": {
+                            "$ref": "#/definitions/entities.TipoSensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tipos-sensores/nombre/{nombre}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene un tipo de sensor por su nombre de la base de datos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipo Sensores"
+                ],
+                "summary": "Obtener un tipo de sensor por su nombre",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Nombre del tipo de sensor",
+                        "name": "nombre",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tipo de sensor obtenido exitosamente",
+                        "schema": {
+                            "$ref": "#/definitions/entities.TipoSensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tipos-sensores/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Obtiene un tipo de sensor por su ID de la base de datos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipo Sensores"
+                ],
+                "summary": "Obtener un tipo de sensor por su ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del tipo de sensor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tipo de sensor obtenido exitosamente",
+                        "schema": {
+                            "$ref": "#/definitions/entities.TipoSensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Actualiza un tipo de sensor existente en la base de datos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipo Sensores"
+                ],
+                "summary": "Actualizar un tipo de sensor existente",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del tipo de sensor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Tipo de sensor a actualizar",
+                        "name": "TipoSensor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateTipoSensorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tipo de sensor actualizado exitosamente",
+                        "schema": {
+                            "$ref": "#/definitions/entities.TipoSensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Elimina un tipo de sensor existente de la base de datos",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tipo Sensores"
+                ],
+                "summary": "Eliminar un tipo de sensor existente",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del tipo de sensor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tipo de sensor eliminado exitosamente",
+                        "schema": {
+                            "$ref": "#/definitions/entities.TipoSensorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1332,6 +2042,63 @@
                 }
             }
         },
+        "entities.CreateSensorRequest": {
+            "type": "object",
+            "required": [
+                "estado"
+            ],
+            "properties": {
+                "direccion_i2c": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "estado": {
+                    "type": "string",
+                    "enum": [
+                        "activo",
+                        "inactivo"
+                    ],
+                    "example": "activo"
+                },
+                "fecha_registro": {
+                    "type": "string",
+                    "example": "2024-03-20 10:00:00"
+                },
+                "id_raspberry": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id_tipo_sensor": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "pin_conexion": {
+                    "type": "string",
+                    "example": "1"
+                }
+            }
+        },
+        "entities.CreateTipoSensorRequest": {
+            "type": "object",
+            "properties": {
+                "descripcion": {
+                    "type": "string",
+                    "example": "Sensor de temperatura DS18B20"
+                },
+                "nombre": {
+                    "type": "string",
+                    "example": "DS18B20"
+                },
+                "tipo_dato": {
+                    "type": "string",
+                    "example": "decimal"
+                },
+                "unidad_medida": {
+                    "type": "string",
+                    "example": "°C"
+                }
+            }
+        },
         "entities.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -1387,6 +2154,64 @@
                 "nombre": {
                     "type": "string",
                     "example": "Raspberry-001"
+                }
+            }
+        },
+        "entities.SensorResponse": {
+            "type": "object",
+            "properties": {
+                "direccion_i2c": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "estado": {
+                    "type": "string",
+                    "example": "activo"
+                },
+                "fecha_registro": {
+                    "type": "string",
+                    "example": "2024-03-20 10:00:00"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id_raspberry": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id_tipo_sensor": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "pin_conexion": {
+                    "type": "string",
+                    "example": "1"
+                }
+            }
+        },
+        "entities.TipoSensorResponse": {
+            "type": "object",
+            "properties": {
+                "descripcion": {
+                    "type": "string",
+                    "example": "Sensor de temperatura DS18B20"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "nombre": {
+                    "type": "string",
+                    "example": "DS18B20"
+                },
+                "tipo_dato": {
+                    "type": "string",
+                    "example": "decimal"
+                },
+                "unidad_medida": {
+                    "type": "string",
+                    "example": "°C"
                 }
             }
         },
@@ -1504,6 +2329,22 @@
                 }
             }
         },
+        "entities.UpdateEstadoSensorRequest": {
+            "type": "object",
+            "required": [
+                "estado"
+            ],
+            "properties": {
+                "estado": {
+                    "type": "string",
+                    "enum": [
+                        "activo",
+                        "inactivo"
+                    ],
+                    "example": "inactivo"
+                }
+            }
+        },
         "entities.UpdateRaspberryPiRequest": {
             "type": "object",
             "required": [
@@ -1523,7 +2364,7 @@
                     "type": "string",
                     "example": "192.168.1.100"
                 },
-                "mac": {
+                "macj": {
                     "type": "string",
                     "example": "00:11:22:33:44:55"
                 },
@@ -1534,6 +2375,59 @@
                 "nombre": {
                     "type": "string",
                     "example": "Raspberry-001"
+                }
+            }
+        },
+        "entities.UpdateSensorRequest": {
+            "type": "object",
+            "required": [
+                "estado"
+            ],
+            "properties": {
+                "direccion_i2c": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "estado": {
+                    "type": "string",
+                    "enum": [
+                        "activo",
+                        "inactivo"
+                    ],
+                    "example": "activo"
+                },
+                "id_raspberry": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id_tipo_sensor": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "pin_conexion": {
+                    "type": "string",
+                    "example": "1"
+                }
+            }
+        },
+        "entities.UpdateTipoSensorRequest": {
+            "type": "object",
+            "properties": {
+                "descripcion": {
+                    "type": "string",
+                    "example": "Sensor de temperatura DS18B20"
+                },
+                "nombre": {
+                    "type": "string",
+                    "example": "DS18B20"
+                },
+                "tipo_dato": {
+                    "type": "string",
+                    "example": "decimal"
+                },
+                "unidad_medida": {
+                    "type": "string",
+                    "example": "°C"
                 }
             }
         }

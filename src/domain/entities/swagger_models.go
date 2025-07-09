@@ -137,7 +137,7 @@ type CreateRaspberryPiRequest struct {
 
 // UpdateRaspberryPiRequest Modelo para actualizar un dispositivo Raspberry Pi
 type UpdateRaspberryPiRequest struct {
-	MAC_Address string `json:"mac" example:"00:11:22:33:44:55" description:"Dirección MAC del dispositivo"`
+	MAC_Address string `json:"macj" example:"00:11:22:33:44:55" description:"Dirección MAC del dispositivo"`
 	IP_Address  string `json:"ip_address" example:"192.168.1.100" description:"Dirección IP del dispositivo"`
 	Nombre      string `json:"nombre" example:"Raspberry-001" description:"Nombre identificativo del dispositivo"`
 	Estado      string `json:"estado" example:"activo" description:"Estado del dispositivo" binding:"required,oneof=activo inactivo"`
@@ -201,3 +201,37 @@ type SensorResponse struct {
 	Estado          string `json:"estado" example:"activo" description:"Estado del sensor"`
 	Fecha_Registro  string `json:"fecha_registro" example:"2024-03-20 10:00:00" description:"Fecha de registro del sensor"`
 }
+
+type UpdateEstadoSensorRequest struct{
+	Estado string `json:"estado" example:"inactivo" description:"Nuevo estado del dispositivo" binding:"required,oneof=activo inactivo"`
+}
+
+
+// =============================
+// Estrcuturas para Tipo Sensor
+// =============================
+type CreateTipoSensorRequest struct{
+	Nombre            string `json:"nombre" example:"DS18B20" description:"Nombre del tipo de sensor"`
+	Descripcion       string `json:"descripcion" example:"Sensor de temperatura DS18B20" description:"Descripción del tipo de sensor"`
+	Unidad_Medida     string `json:"unidad_medida" example:"°C" description:"Unidad de medida del tipo de sensor"`
+	Tipo_Dato         string `json:"tipo_dato" example:"decimal" description:"Tipo de dato del tipo de sensor"`
+}
+
+type UpdateTipoSensorRequest struct{
+	Nombre            string `json:"nombre" example:"DS18B20" description:"Nombre del tipo de sensor"`
+	Descripcion       string `json:"descripcion" example:"Sensor de temperatura DS18B20" description:"Descripción del tipo de sensor"`
+	Unidad_Medida     string `json:"unidad_medida" example:"°C" description:"Unidad de medida del tipo de sensor"`
+	Tipo_Dato         string `json:"tipo_dato" example:"decimal" description:"Tipo de dato del tipo de sensor"`
+}
+
+
+type TipoSensorResponse struct{
+	ID              int `json:"id" example:"1" description:"ID del tipo de sensor"`
+	Nombre            string `json:"nombre" example:"DS18B20" description:"Nombre del tipo de sensor"`
+	Descripcion       string `json:"descripcion" example:"Sensor de temperatura DS18B20" description:"Descripción del tipo de sensor"`
+	Unidad_Medida     string `json:"unidad_medida" example:"°C" description:"Unidad de medida del tipo de sensor"`
+	Tipo_Dato         string `json:"tipo_dato" example:"decimal" description:"Tipo de dato del tipo de sensor"`
+}
+
+
+	

@@ -168,6 +168,47 @@ definitions:
     - modelo
     - nombre
     type: object
+  entities.CreateSensorRequest:
+    properties:
+      direccion_i2c:
+        example: "1"
+        type: string
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: activo
+        type: string
+      fecha_registro:
+        example: "2024-03-20 10:00:00"
+        type: string
+      id_raspberry:
+        example: 1
+        type: integer
+      id_tipo_sensor:
+        example: 1
+        type: integer
+      pin_conexion:
+        example: "1"
+        type: string
+    required:
+    - estado
+    type: object
+  entities.CreateTipoSensorRequest:
+    properties:
+      descripcion:
+        example: Sensor de temperatura DS18B20
+        type: string
+      nombre:
+        example: DS18B20
+        type: string
+      tipo_dato:
+        example: decimal
+        type: string
+      unidad_medida:
+        example: °C
+        type: string
+    type: object
   entities.ErrorResponse:
     properties:
       error:
@@ -207,6 +248,48 @@ definitions:
         type: string
       nombre:
         example: Raspberry-001
+        type: string
+    type: object
+  entities.SensorResponse:
+    properties:
+      direccion_i2c:
+        example: "1"
+        type: string
+      estado:
+        example: activo
+        type: string
+      fecha_registro:
+        example: "2024-03-20 10:00:00"
+        type: string
+      id:
+        example: 1
+        type: integer
+      id_raspberry:
+        example: 1
+        type: integer
+      id_tipo_sensor:
+        example: 1
+        type: integer
+      pin_conexion:
+        example: "1"
+        type: string
+    type: object
+  entities.TipoSensorResponse:
+    properties:
+      descripcion:
+        example: Sensor de temperatura DS18B20
+        type: string
+      id:
+        example: 1
+        type: integer
+      nombre:
+        example: DS18B20
+        type: string
+      tipo_dato:
+        example: decimal
+        type: string
+      unidad_medida:
+        example: °C
         type: string
     type: object
   entities.UpdateCalibracionRequest:
@@ -290,6 +373,17 @@ definitions:
     required:
     - estado
     type: object
+  entities.UpdateEstadoSensorRequest:
+    properties:
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: inactivo
+        type: string
+    required:
+    - estado
+    type: object
   entities.UpdateRaspberryPiRequest:
     properties:
       estado:
@@ -301,7 +395,7 @@ definitions:
       ip_address:
         example: 192.168.1.100
         type: string
-      mac:
+      macj:
         example: "00:11:22:33:44:55"
         type: string
       modelo:
@@ -313,6 +407,44 @@ definitions:
     required:
     - estado
     - modelo
+    type: object
+  entities.UpdateSensorRequest:
+    properties:
+      direccion_i2c:
+        example: "1"
+        type: string
+      estado:
+        enum:
+        - activo
+        - inactivo
+        example: activo
+        type: string
+      id_raspberry:
+        example: 1
+        type: integer
+      id_tipo_sensor:
+        example: 1
+        type: integer
+      pin_conexion:
+        example: "1"
+        type: string
+    required:
+    - estado
+    type: object
+  entities.UpdateTipoSensorRequest:
+    properties:
+      descripcion:
+        example: Sensor de temperatura DS18B20
+        type: string
+      nombre:
+        example: DS18B20
+        type: string
+      tipo_dato:
+        example: decimal
+        type: string
+      unidad_medida:
+        example: °C
+        type: string
     type: object
 externalDocs:
   description: Autenticación API
@@ -1017,6 +1149,459 @@ paths:
       summary: Obtener Raspberry Pi por MAC
       tags:
       - RaspberryPi
+  /sensores:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene todos los sensores registrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.SensorResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener todos los sensores
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo sensor en la base de datos
+      parameters:
+      - description: Sensor a crear
+        in: body
+        name: sensor
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateSensorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.SensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Crear un sensor
+  /sensores/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina un sensor existente
+      parameters:
+      - description: ID del sensor
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Eliminar un sensor
+    get:
+      consumes:
+      - application/json
+      description: Obtiene un sensor por su ID
+      parameters:
+      - description: ID del sensor
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.SensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener un sensor
+    put:
+      consumes:
+      - application/json
+      description: Actualiza un sensor existente
+      parameters:
+      - description: ID del sensor
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Sensor a actualizar
+        in: body
+        name: sensor
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateSensorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.SensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar un sensor
+  /sensores/{id}/estado:
+    put:
+      consumes:
+      - application/json
+      description: Actualiza el estado de un sensor existente
+      parameters:
+      - description: ID del sensor
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Estado a actualizar
+        in: body
+        name: estado
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateEstadoSensorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar el estado de un sensor
+  /sensores/raspberry/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene todos los sensores asociados a un Raspberry Pi
+      parameters:
+      - description: ID del Raspberry Pi
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.SensorResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener sensores por Raspberry Pi
+  /tipos-sensores:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene todos los tipos de sensores de la base de datos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de tipos de sensores obtenida exitosamente
+          schema:
+            items:
+              $ref: '#/definitions/entities.TipoSensorResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener todos los tipos de sensores
+      tags:
+      - Tipo Sensores
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo tipo de sensor en la base de datos
+      parameters:
+      - description: Tipo de sensor a crear
+        in: body
+        name: TipoSensor
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateTipoSensorRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Tipo de sensor creado exitosamente
+          schema:
+            $ref: '#/definitions/entities.TipoSensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Crear un nuevo tipo de sensor
+      tags:
+      - Tipo Sensores
+  /tipos-sensores/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina un tipo de sensor existente de la base de datos
+      parameters:
+      - description: ID del tipo de sensor
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tipo de sensor eliminado exitosamente
+          schema:
+            $ref: '#/definitions/entities.TipoSensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Eliminar un tipo de sensor existente
+      tags:
+      - Tipo Sensores
+    get:
+      consumes:
+      - application/json
+      description: Obtiene un tipo de sensor por su ID de la base de datos
+      parameters:
+      - description: ID del tipo de sensor
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tipo de sensor obtenido exitosamente
+          schema:
+            $ref: '#/definitions/entities.TipoSensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener un tipo de sensor por su ID
+      tags:
+      - Tipo Sensores
+    put:
+      consumes:
+      - application/json
+      description: Actualiza un tipo de sensor existente en la base de datos
+      parameters:
+      - description: ID del tipo de sensor
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Tipo de sensor a actualizar
+        in: body
+        name: TipoSensor
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateTipoSensorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tipo de sensor actualizado exitosamente
+          schema:
+            $ref: '#/definitions/entities.TipoSensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Actualizar un tipo de sensor existente
+      tags:
+      - Tipo Sensores
+  /tipos-sensores/nombre/{nombre}:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene un tipo de sensor por su nombre de la base de datos
+      parameters:
+      - description: Nombre del tipo de sensor
+        in: path
+        name: nombre
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tipo de sensor obtenido exitosamente
+          schema:
+            $ref: '#/definitions/entities.TipoSensorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Obtener un tipo de sensor por su nombre
+      tags:
+      - Tipo Sensores
 schemes:
 - http
 securityDefinitions:
